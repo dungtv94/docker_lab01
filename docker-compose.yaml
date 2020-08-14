@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+        webapp:
+                image: "nginx_lab01"
+                container_name: "webapp_lab01"
+                network_mode: "host"
+                restart: always
+                logging:
+                        driver: syslog
+                        options:
+                                syslog-facility: "local1"
+                                syslog-format: "rfc3164"
+                                tag: "webapp_lab01"
