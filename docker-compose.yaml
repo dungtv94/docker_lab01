@@ -2,12 +2,39 @@ version: "3.8"
 services:
         webapp:
                 image: "nginx_lab01"
-                container_name: "webapp_lab01"
-                network_mode: "host"
+                container_name: "webapp_lab02"
+                networks:
+                        - web
+                        - db
                 restart: always
+                environment: 
+                        DB_NAME: "db"
                 logging:
-                        driver: syslog
+                        driver: "json-file"
                         options:
-                                syslog-facility: "local1"
-                                syslog-format: "rfc3164"
-                                tag: "webapp_lab01"
+                                max-size: "200k"
+                                max-file: "10"
+                                tag: "webapp_lab02"
+                ports:
+                        - "80:80"
+        db:
+                image: "mysql:5.7"
+                command: --default-authentication-plugin=mysql_native_password
+                restart: always
+                environment:
+                  MYSQL_ROOT_PASSWORD: root
+                networks: 
+                        - db
+                logging:
+                        driver: "json-file"
+                        options:
+                                max-size: "200k"
+                                max-file: "10"
+                                tag: "db_lab02"
+                ports: 
+                        - "3306:3306"
+networks:
+        web:
+                driver: bridge
+        db:
+                driver: bridge
